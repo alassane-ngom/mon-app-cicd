@@ -7,6 +7,7 @@ on:
     branches: [main]
 
 jobs:
+    # ---- JOB 1 : Tests ----
   tests:
     name: Lancer les tests Node.js
     runs-on: ubuntu-latest
@@ -20,10 +21,33 @@ jobs:
       - name: ⚙️ Installer Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: 📦 Installer les dépendances
         run: npm install
 
       - name: 🧪 Lancer les tests
         run: npm test
+
+  # ---- JOB 2 : Build Docker (se lance APRÈS les tests) ----
+ build-and-push:
+    name: 🐳 Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: tests  # ← Ce Job attend que "tests" réussisse
+    
+    steps:
+      - name: 📥 Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: 🔑 Se connecter à Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: 🏗️ Construire et pousser l'image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mon-app-cicd:latest

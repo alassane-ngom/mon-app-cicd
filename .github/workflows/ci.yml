@@ -1,4 +1,4 @@
-name: CI — Tests Automatiques
+name: CI/CD Pipeline
 
 on:
   push:
@@ -7,21 +7,18 @@ on:
     branches: [main]
 
 jobs:
-    # ---- JOB 1 : Tests ----
+  # ---- JOB 1 : Tests ----
   tests:
-    name: Lancer les tests Node.js
+    name: 🧪 Lancer les tests Node.js
     runs-on: ubuntu-latest
-
     steps:
       - name: 📥 Récupérer le code
         uses: actions/checkout@v4
-        # "uses" = utiliser une action prête à l'emploi
-        # actions/checkout@v4 = télécharge ton code sur le Runner
 
       - name: ⚙️ Installer Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '20'
 
       - name: 📦 Installer les dépendances
         run: npm install
@@ -29,12 +26,12 @@ jobs:
       - name: 🧪 Lancer les tests
         run: npm test
 
-  # ---- JOB 2 : Build Docker (se lance APRÈS les tests) ----
- build-and-push:
+  # ---- JOB 2 : Build Docker ----
+  build-and-push:
     name: 🐳 Build & Push Docker Image
     runs-on: ubuntu-latest
-    needs: tests  # ← Ce Job attend que "tests" réussisse
-    
+    needs: tests
+
     steps:
       - name: 📥 Récupérer le code
         uses: actions/checkout@v4

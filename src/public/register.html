@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inscription</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Créer un compte</h2>
+
+    <select id="role">
+        <option value="client">Client</option>
+        <option value="proprietaire">Propriétaire</option>
+    </select>
+
+    <input id="nom" placeholder="Nom">
+    <input id="prenom" placeholder="Prénom">
+    <input id="email" placeholder="Email">
+    <input id="telephone" placeholder="Téléphone">
+    <input id="motDePasse" type="password" placeholder="Mot de passe">
+
+    <button onclick="register()">S'inscrire</button>
+
+    <a href="/login.html">J'ai déjà un compte</a>
+
+</div>
+
+<script>
+async function register() {
+
+    const role = document.getElementById("role").value;
+
+    const data = {
+        nom: nom.value,
+        prenom: prenom.value,
+        email: email.value,
+        telephone: telephone.value,
+        motDePasse: motDePasse.value
+    };
+
+    const url = role === "client"
+        ? "/api/auth/register/client"
+        : "/api/auth/register/proprietaire";
+
+    const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+
+    alert(result.message);
+
+    window.location.href = "/login.html";
+}
+</script>
+
+</body>
+</html>

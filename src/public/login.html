@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connexion</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Connexion</h2>
+
+    <select id="role">
+        <option value="client">Client</option>
+        <option value="proprietaire">Propriétaire</option>
+    </select>
+
+    <input id="email" placeholder="Email">
+    <input id="motDePasse" type="password" placeholder="Mot de passe">
+
+    <button onclick="login()">Se connecter</button>
+
+    <a href="/register.html">Créer un compte</a>
+
+</div>
+
+<script>
+async function login() {
+
+    const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            email: email.value,
+            motDePasse: motDePasse.value,
+            role: role.value
+        })
+    });
+
+    const data = await res.json();
+
+    if (data.token) {
+
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+
+        window.location.href =
+            data.role === "client"
+            ? "/client-dashboard.html"
+            : "/proprietaire-dashboard.html";
+
+    } else {
+        alert(data.message);
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Client</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <h1>Bienvenue Client</h1>
+
+    <ul>
+        <li>Voir services disponibles</li>
+        <li>Réserver un service</li>
+        <li>Voir mes tickets</li>
+    </ul>
+
+    <button onclick="logout()">Déconnexion</button>
+
+</div>
+
+<script>
+function logout() {
+    localStorage.clear();
+    window.location.href = "/login.html";
+}
+</script>
+
+</body>
+</html>

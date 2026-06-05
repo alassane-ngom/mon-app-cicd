@@ -9,9 +9,13 @@ app.use(express.static('src/public'));
 
 const userRoutes = require('./src/routes/userRoutes');
 const authRoutes = require('./src/routes/authRoutes');
+const serviceRoutes = require('./src/routes/serviceRoutes');
+const reservationRoutes = require('./src/routes/reservationRoutes');
 
 app.use('/api', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/reservations', reservationRoutes);
 
 app.get('/', (req, res) => {
   return res.status(200).json({

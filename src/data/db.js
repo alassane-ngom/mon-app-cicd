@@ -29,6 +29,28 @@ db.serialize(() => {
             motDePasse TEXT
         )
     `);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS services (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            titre TEXT,
+            description TEXT,
+            prix REAL,
+            proprietaireId INTEGER,
+            disponibilite INTEGER DEFAULT 1
+        )
+    `);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS reservations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            serviceId INTEGER,
+            clientId INTEGER,
+            dateReservation TEXT,
+            statut TEXT DEFAULT 'en_attente',
+            commentaire TEXT
+        )
+    `);
 });
 
 module.exports = db;

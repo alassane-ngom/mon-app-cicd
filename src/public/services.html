@@ -68,73 +68,53 @@
 
   <div class="container" id="services"></div>
 
-  <script>
+ <script>
 
-    // 🔹 Données fictives
-    const services = [
-      {
-        id: 1,
-        nom: "Salon de coiffure",
-        description: "Coupe et soins capillaires"
-      },
+async function loadServices() {
 
-      {
-        id: 2,
-        nom: "Restaurant",
-        description: "Réservation de table"
-      },
+    try {
 
-      {
-        id: 3,
-        nom: "Salle de sport",
-        description: "Abonnement mensuel"
-      },
+        const response = await fetch('/api/services');
+        const services = await response.json();
 
-      {
-        id: 4,
-        nom: "Terrain de foot",
-        description: "Réservation terrain"
-      }
-    ];
+        let html = "";
 
-    // 🔹 Charger les services
-    function loadServices() {
+        services.forEach(service => {
 
-      let html = "";
+            html += `
+                <div class="card">
+                    <h3>${service.titre}</h3>
+                    <p>${service.description || ''}</p>
+                    <p><strong>Prix:</strong> ${service.prix} FCFA</p>
 
-      services.forEach(service => {
+                    <button onclick="selectService(${service.id})">
+                        Réserver
+                    </button>
+                </div>
+            `;
+        });
 
-        html += `
-          <div class="card">
-            <h3>${service.nom}</h3>
-            <p>${service.description}</p>
+        document.getElementById("services").innerHTML = html;
 
-            <button onclick="selectService(${service.id})">
-              Réserver
-            </button>
-          </div>
-        `;
+    } catch (error) {
 
-      });
+        console.error("Erreur API services:", error);
 
-      document.getElementById("services").innerHTML = html;
+        document.getElementById("services").innerHTML =
+            "<p>Erreur chargement services</p>";
     }
+}
 
-    // 🔹 Sélection service
-    function selectService(id) {
+function selectService(id) {
 
-      localStorage.setItem("service_id", id);
+    localStorage.setItem("service_id", id);
 
-      alert("Service sélectionné : " + id);
+    window.location.href = "/reservation.html";
+}
 
-      // prochaine page plus tard
-      // window.location.href = "reservation.html";
-    }
+loadServices();
 
-    // 🔹 Lancer affichage
-    loadServices();
-
-  </script>
+</script>
 
 </body>
 </html>

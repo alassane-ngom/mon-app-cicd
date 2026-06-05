@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 
+
 <head>
     <meta charset="UTF-8">
     <title>Réserver un service</title>
+
 
     <style>
         body {
@@ -13,9 +15,11 @@
             padding: 20px;
         }
 
+
         h1 {
             text-align: center;
         }
+
 
         .box {
             max-width: 500px;
@@ -26,11 +30,13 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
+
         input, select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
         }
+
 
         button {
             width: 100%;
@@ -41,9 +47,11 @@
             cursor: pointer;
         }
 
+
         button:hover {
             background: darkgreen;
         }
+
 
         .info {
             background: #eef;
@@ -54,62 +62,105 @@
     </style>
 </head>
 
+
 <body>
+
 
     <h1>Réserver un service</h1>
 
+
     <div class="box">
+
 
         <div class="info" id="selectedService">
             Service sélectionné : ...
         </div>
 
+
         <label>Date</label>
         <input type="date" id="date">
+
 
         <label>Heure</label>
         <input type="time" id="heure">
 
+
         <button onclick="reserver()">Confirmer la réservation</button>
+
 
     </div>
 
-    <script>
 
-        // 🔹 récupérer service sélectionné (workflow étape 1)
-        const serviceId = localStorage.getItem("service_id");
+  <script>
 
-        document.getElementById("selectedService").innerText =
-            "Service sélectionné : " + serviceId;
 
-        // 🔹 créer réservation (mock backend-ready)
-        function reserver() {
+const serviceId = localStorage.getItem("service_id");
 
-            const reservation = {
-                service_id: serviceId,
-                date: document.getElementById("date").value,
-                heure: document.getElementById("heure").value
-            };
 
-            // validation simple
-            if (!reservation.date || !reservation.heure) {
-                alert("Veuillez remplir tous les champs");
-                return;
-            }
+// ⚠️ temporaire (car pas encore login)
+const clientId = 1;
 
-            // stockage temporaire (backend futur remplacera ça)
-            let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
-            reservations.push(reservation);
 
-            localStorage.setItem("reservations", JSON.stringify(reservations));
+document.getElementById("serviceInfo").innerText =
+    "Service sélectionné : " + serviceId;
 
-            alert("Réservation enregistrée !");
 
-            window.location.href = "/tickets.html";
+async function reserver() {
+
+
+    const dateReservation = document.getElementById("date").value;
+
+
+    if (!dateReservation) {
+        alert("Choisis une date");
+        return;
+    }
+
+
+    try {
+
+
+        const response = await fetch("/api/reservations", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+
+
+                serviceId: Number(serviceId),
+                clientId: clientId,
+                dateReservation: dateReservation,
+                commentaire: null
+            })
+        });
+
+
+        const data = await response.json();
+
+
+        console.log("Réponse backend:", data);
+
+
+        if (!response.ok) {
+            alert(data.message || "Erreur réservation ❌");
+            return;
         }
 
-    </script>
 
-</body>
+        alert("Réservation réussie ✅");
 
-</html>
+
+        window.location.href = "/tickets.html";
+
+
+    } catch (error) {
+
+
+        console.error(error);
+        alert("Erreur serveur ❌");
+    }
+}
+
+
+</script>

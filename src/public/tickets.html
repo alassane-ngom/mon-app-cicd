@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mes tickets</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .ticket {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .empty {
+            text-align: center;
+            color: gray;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 8px;
+            width: 100%;
+            border: none;
+            background: red;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Mes tickets</h1>
+
+    <div class="container" id="tickets"></div>
+
+    <script>
+
+        // 🔹 récupérer les réservations
+        function loadTickets() {
+
+            let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+
+            let container = document.getElementById("tickets");
+
+            if (reservations.length === 0) {
+                container.innerHTML = "<p class='empty'>Aucune réservation trouvée</p>";
+                return;
+            }
+
+            let html = "";
+
+            reservations.forEach((r, index) => {
+
+                html += `
+                    <div class="ticket">
+                        <h3>Ticket #${index + 1}</h3>
+                        <p><strong>Service ID:</strong> ${r.service_id}</p>
+                        <p><strong>Date:</strong> ${r.date}</p>
+                        <p><strong>Heure:</strong> ${r.heure}</p>
+
+                        <button onclick="deleteTicket(${index})">
+                            Supprimer
+                        </button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // 🔹 supprimer ticket
+        function deleteTicket(index) {
+
+            let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+
+            reservations.splice(index, 1);
+
+            localStorage.setItem("reservations", JSON.stringify(reservations));
+
+            loadTickets();
+        }
+
+        loadTickets();
+
+    </script>
+
+</body>
+
+</html>

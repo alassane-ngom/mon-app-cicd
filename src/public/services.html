@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Services disponibles</title>
+
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #222;
+    }
+
+    .card p {
+      color: #666;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <h1>Services disponibles</h1>
+
+  <div class="container" id="services"></div>
+
+  <script>
+
+    // 🔹 Données fictives
+    const services = [
+      {
+        id: 1,
+        nom: "Salon de coiffure",
+        description: "Coupe et soins capillaires"
+      },
+
+      {
+        id: 2,
+        nom: "Restaurant",
+        description: "Réservation de table"
+      },
+
+      {
+        id: 3,
+        nom: "Salle de sport",
+        description: "Abonnement mensuel"
+      },
+
+      {
+        id: 4,
+        nom: "Terrain de foot",
+        description: "Réservation terrain"
+      }
+    ];
+
+    // 🔹 Charger les services
+    function loadServices() {
+
+      let html = "";
+
+      services.forEach(service => {
+
+        html += `
+          <div class="card">
+            <h3>${service.nom}</h3>
+            <p>${service.description}</p>
+
+            <button onclick="selectService(${service.id})">
+              Réserver
+            </button>
+          </div>
+        `;
+
+      });
+
+      document.getElementById("services").innerHTML = html;
+    }
+
+    // 🔹 Sélection service
+    function selectService(id) {
+
+      localStorage.setItem("service_id", id);
+
+      alert("Service sélectionné : " + id);
+
+      // prochaine page plus tard
+      // window.location.href = "reservation.html";
+    }
+
+    // 🔹 Lancer affichage
+    loadServices();
+
+  </script>
+
+</body>
+</html>

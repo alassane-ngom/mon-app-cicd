@@ -12,7 +12,7 @@ const validateUser = require('../validators/userValidator');
 router.post('/client', validateUser, userController.createClient);
 router.get('/client/:id', userController.getClient);
 router.get('/clients', userController.getAllClients);
-router.put('/client/:id', validateUser, userController.updateClient);
+router.put('/client/:id', userController.updateClient);
 router.delete('/client/:id', userController.deleteClient);
 
 
@@ -23,7 +23,7 @@ router.delete('/client/:id', userController.deleteClient);
 router.post('/proprietaire', validateUser, userController.createProprietaire);
 router.get('/proprietaire/:id', userController.getProprietaire);
 router.get('/proprietaires', userController.getAllProprietaires);
-router.put('/proprietaire/:id', validateUser, userController.updateProprietaire);
+router.put('/proprietaire/:id', userController.updateProprietaire);
 router.delete('/proprietaire/:id', userController.deleteProprietaire);
 
 

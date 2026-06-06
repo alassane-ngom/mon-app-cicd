@@ -52,58 +52,47 @@
     <h1>Mes tickets</h1>
 
     <div class="container" id="tickets"></div>
+<script>
 
-    <script>
+async function loadTickets() {
 
-        // 🔹 récupérer les réservations
-        function loadTickets() {
+    try {
+        const response = await fetch("/api/reservations");
+        const reservations = await response.json();
 
-            let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+        const container = document.getElementById("tickets");
 
-            let container = document.getElementById("tickets");
-
-            if (reservations.length === 0) {
-                container.innerHTML = "<p class='empty'>Aucune réservation trouvée</p>";
-                return;
-            }
-
-            let html = "";
-
-            reservations.forEach((r, index) => {
-
-                html += `
-                    <div class="ticket">
-                        <h3>Ticket #${index + 1}</h3>
-                        <p><strong>Service ID:</strong> ${r.service_id}</p>
-                        <p><strong>Date:</strong> ${r.date}</p>
-                        <p><strong>Heure:</strong> ${r.heure}</p>
-
-                        <button onclick="deleteTicket(${index})">
-                            Supprimer
-                        </button>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
+        if (!reservations || reservations.length === 0) {
+            container.innerHTML = "<p>Aucune réservation trouvée</p>";
+            return;
         }
 
-        // 🔹 supprimer ticket
-        function deleteTicket(index) {
+        let html = "";
 
-            let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+        reservations.forEach((r, index) => {
+            html += `
+                <div class="ticket">
+                    <h3>Ticket #${index + 1}</h3>
+                    <p><strong>Service ID:</strong> ${r.serviceId}</p>
+                    <p><strong>Client ID:</strong> ${r.clientId}</p>
+                    <p><strong>Date:</strong> ${r.dateReservation}</p>
+                    <p><strong>Statut:</strong> ${r.statut}</p>
+                </div>
+            `;
+        });
 
-            reservations.splice(index, 1);
+        container.innerHTML = html;
 
-            localStorage.setItem("reservations", JSON.stringify(reservations));
+    } catch (error) {
+        console.error("Erreur tickets:", error);
+        document.getElementById("tickets").innerHTML =
+            "<p>Erreur chargement tickets</p>";
+    }
+}
 
-            loadTickets();
-        }
+loadTickets();
 
-        loadTickets();
-
-    </script>
-
+</script>
 </body>
 
 </html>
